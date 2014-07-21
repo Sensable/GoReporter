@@ -16,12 +16,12 @@ func main() {
         Name: "some name here",
     }
 
-    options := GoReporter.Options {
+    settings := GoReporter.Settings {
         AccessToken: "some-access-token",
         Private: false,
     }
 
-    report := sensable.BuildReporter(options);
+    report := sensable.BuildReporter(settings);
 
     sample := GoReporter.Sample {
         Data: 32.5,

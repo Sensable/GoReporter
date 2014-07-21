@@ -1,10 +1,14 @@
 package GoReporter
 
 import (
-        "encoding/json"
+        "encoding/json";
         )
 
-const uri = "http://sensable.io/sensable"
+const SensableApiUri = "http://sensable.io/sensable"
+
+type Api struct {
+    Uri string
+}
 
 type Sample struct {
     Data float64 `json:"data"`
@@ -22,21 +26,30 @@ type Sensable struct {
 
 type payload struct {
     Sensable
-    Options
+    Settings
     Sample Sample `json:"sample"`
 }
 
-type Options struct {
+type Settings struct {
     AccessToken string `json:"accessToken"`
     Private bool `json:"-"`
 }
 
-func (payload payload) upload(options Options) (string, error) {
+func (payload payload) upload(settings Settings, api Api) (string, error) {
     b, err := json.Marshal(payload)
     return string(b), err
 }
 
-func (sensable Sensable) BuildReporter(options Options) func(sample Sample) (string, error) {
+func (sensable Sensable) BuildReporter(settings Settings, api... Api) func(sample Sample) (string, error) {
+    var apiConfiguration Api
+
+    if api == nil {
+        apiConfiguration = Api {
+            Uri: SensableApiUri,
+        }
+    } else {
+        apiConfiguration = api[0]
+    }
     payload := payload {
         Sensable: Sensable {
             sensable.SensorId,
@@ -46,13 +59,13 @@ func (sensable Sensable) BuildReporter(options Options) func(sample Sample) (str
             sensable.Longitude,
             sensable.Name,
         },
-        Options: Options {
-            options.AccessToken,
-            options.Private,
+        Settings: Settings {
+            settings.AccessToken,
+            settings.Private,
         },
     }
     return func (sample Sample) (string, error) {
         payload.Sample = sample
-        return payload.upload(options)
+        return payload.upload(settings, apiConfiguration)
     }
 }
