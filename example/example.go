@@ -29,7 +29,7 @@ func main() {
 
     sample := GoReporter.Sample {
         Data: 32.5,
-        Time: int64(time.Now().Unix()),
+        Time: int64(time.Now().UnixNano() / 1e6),
     }
 
     fmt.Println(report(sample));
