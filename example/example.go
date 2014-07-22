@@ -6,6 +6,8 @@ import (
         "fmt"
     )
 
+const requestbinUrl = "http://requestb.in/1jy9gkt1"
+
 func main() {
     sensable := GoReporter.Sensable {
         SensorId: "some-id",
@@ -22,15 +24,22 @@ func main() {
     }
 
     api := GoReporter.Api {
-        "http://requestb.in/1jy9gkt1",
+        requestbinUrl,
     }
 
-    report := sensable.BuildReporter(settings, api);
+    fmt.Println("Check result at " + requestbinUrl + "?inspect")
+
+    report := sensable.BuildReporter(settings, api)
 
     sample := GoReporter.Sample {
         Data: 32.5,
         Time: int64(time.Now().UnixNano() / 1e6),
+        State: "it's getting warmer",
     }
 
-    fmt.Println(report(sample));
+    _, err := report(sample)
+
+    if err != nil {
+        fmt.Println("Something went wrong", err)
+    }
 }

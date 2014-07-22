@@ -16,6 +16,7 @@ type Api struct {
 type Sample struct {
     Data float64 `json:"data"`
     Time int64 `json:"time"`
+    State string `json:"state"`
 }
 
 type Sensable struct {
