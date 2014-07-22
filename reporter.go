@@ -2,6 +2,9 @@ package GoReporter
 
 import (
         "encoding/json";
+        "net/http";
+        "bytes";
+        "errors"
         )
 
 const SensableApiUri = "http://sensable.io/sensable"
@@ -35,12 +38,23 @@ type Settings struct {
     Private bool `json:"-"`
 }
 
-func (payload payload) upload(settings Settings, api Api) (string, error) {
+func (payload payload) upload(settings Settings, api Api) (bool, error) {
     b, err := json.Marshal(payload)
-    return string(b), err
+    if err != nil {
+        return false, err
+    }
+    res, err := http.Post(api.Uri, "application/json", bytes.NewReader(b));
+    defer res.Body.Close();
+    if err != nil {
+        return false, err
+    }
+    if res.StatusCode == 200 {
+        return true, nil
+    }
+    return false, errors.New("Server responded with " + res.Status)
 }
 
-func (sensable Sensable) BuildReporter(settings Settings, api... Api) func(sample Sample) (string, error) {
+func (sensable Sensable) BuildReporter(settings Settings, api... Api) func(sample Sample) (bool, error) {
     var apiConfiguration Api
 
     if api == nil {
@@ -64,7 +78,7 @@ func (sensable Sensable) BuildReporter(settings Settings, api... Api) func(sampl
             settings.Private,
         },
     }
-    return func (sample Sample) (string, error) {
+    return func (sample Sample) (bool, error) {
         payload.Sample = sample
         return payload.upload(settings, apiConfiguration)
     }

@@ -21,7 +21,11 @@ func main() {
         Private: false,
     }
 
-    report := sensable.BuildReporter(settings);
+    api := GoReporter.Api {
+        "http://requestb.in/1jy9gkt1",
+    }
+
+    report := sensable.BuildReporter(settings, api);
 
     sample := GoReporter.Sample {
         Data: 32.5,
