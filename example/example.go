@@ -1,3 +1,7 @@
+/*
+A very simple example showing how to use the GoReporter
+for Sensable.
+*/
 package main
 
 import (
