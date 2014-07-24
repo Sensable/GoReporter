@@ -6,7 +6,7 @@ import (
         "fmt"
     )
 
-const requestbinUrl = "http://requestb.in/1jy9gkt1"
+const requestbinUrl = "http://requestb.in/1696gmd1"
 
 func main() {
     sensable := GoReporter.Sensable {

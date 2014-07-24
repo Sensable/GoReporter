@@ -19,8 +19,8 @@ type Sensable struct {
     SensorId string `json:"sensorid"`
     Unit string `json:"unit"`
     SensorType string `json:"sensortype"`
-    Latitude float64 `json:"-"`
-    Longitude float64 `json:"-"`
+    Latitude float64 `json:"latitude"`
+    Longitude float64 `json:"longitude"`
     Name string `json:"name"`
 }
 
