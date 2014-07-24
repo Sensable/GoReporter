@@ -23,13 +23,9 @@ func main() {
         Private: false,
     }
 
-    api := GoReporter.Api {
-        requestbinUrl,
-    }
-
     fmt.Println("Check result at " + requestbinUrl + "?inspect")
 
-    report := sensable.BuildReporter(settings, api)
+    reporter := sensable.BuildReporter(settings, requestbinUrl)
 
     sample := GoReporter.Sample {
         Data: 32.5,
@@ -37,7 +33,7 @@ func main() {
         State: "it's getting warmer",
     }
 
-    _, err := report(sample)
+    _, err := reporter.Report(sample)
 
     if err != nil {
         fmt.Println("Something went wrong", err)

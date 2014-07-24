@@ -9,10 +9,6 @@ import (
 
 const SensableApiUri = "http://sensable.io/sensable"
 
-type Api struct {
-    Uri string
-}
-
 type Sample struct {
     Data float64 `json:"data"`
     Time int64 `json:"time"`
@@ -23,8 +19,8 @@ type Sensable struct {
     SensorId string `json:"sensorid"`
     Unit string `json:"unit"`
     SensorType string `json:"sensortype"`
-    Latitude float64 `json:"latitude,string"`
-    Longitude float64 `json:"longitude,string"`
+    Latitude float64 `json:"-"`
+    Longitude float64 `json:"-"`
     Name string `json:"name"`
 }
 
@@ -34,17 +30,12 @@ type payload struct {
     Sample Sample `json:"sample"`
 }
 
-type Settings struct {
-    AccessToken string `json:"accessToken"`
-    Private bool `json:"-"`
-}
-
-func (payload payload) upload(settings Settings, api Api) (bool, error) {
+func (payload payload) upload(uri string) (bool, error) {
     b, err := json.Marshal(payload)
     if err != nil {
         return false, err
     }
-    res, err := http.Post(api.Uri, "application/json", bytes.NewReader(b));
+    res, err := http.Post(uri, "application/json", bytes.NewReader(b));
     defer res.Body.Close();
     if err != nil {
         return false, err
@@ -55,32 +46,45 @@ func (payload payload) upload(settings Settings, api Api) (bool, error) {
     return false, errors.New("Server responded with " + res.Status)
 }
 
-func (sensable Sensable) BuildReporter(settings Settings, api... Api) func(sample Sample) (bool, error) {
-    var apiConfiguration Api
+type Settings struct {
+    AccessToken string `json:"accessToken"`
+    Private bool `json:"-"`
+}
 
-    if api == nil {
-        apiConfiguration = Api {
-            Uri: SensableApiUri,
-        }
-    } else {
-        apiConfiguration = api[0]
-    }
+type Reporter struct {
+    uri string
+    settings Settings
+    sensable Sensable
+}
+
+func (reporter Reporter) Report(sample Sample) (bool, error) {
     payload := payload {
         Sensable: Sensable {
-            sensable.SensorId,
-            sensable.Unit,
-            sensable.SensorType,
-            sensable.Latitude,
-            sensable.Longitude,
-            sensable.Name,
+            reporter.sensable.SensorId,
+            reporter.sensable.Unit,
+            reporter.sensable.SensorType,
+            reporter.sensable.Latitude,
+            reporter.sensable.Longitude,
+            reporter.sensable.Name,
         },
         Settings: Settings {
-            settings.AccessToken,
-            settings.Private,
+            reporter.settings.AccessToken,
+            reporter.settings.Private,
         },
+        Sample: sample,
     }
-    return func (sample Sample) (bool, error) {
-        payload.Sample = sample
-        return payload.upload(settings, apiConfiguration)
+    return payload.upload(reporter.uri)
+}
+
+func (sensable Sensable) BuildReporter(settings Settings, uri... string) (reporter Reporter) {
+    sensableUri := SensableApiUri
+    if uri != nil {
+        sensableUri = uri[0]
     }
+    reporter = Reporter {
+        uri: sensableUri,
+        settings: settings,
+        sensable: sensable,
+    }
+    return
 }
