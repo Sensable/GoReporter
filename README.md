@@ -2,7 +2,7 @@
 
 ## Disclaimer
 
-This is the first Go code I ever write.
+This is the first Go code I have ever written.
 
 ## Example
 
