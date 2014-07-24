@@ -13,8 +13,10 @@ func main() {
         SensorId: "some-id",
         Unit: "°c",
         SensorType: "temperature",
-        Latitude: 52.5,
-        Longitude: 13.3,
+        Location: GoReporter.Location {
+            Latitude: 52.5,
+            Longitude: 13.3,
+        },
         Name: "some name here",
     }
 
@@ -28,8 +30,8 @@ func main() {
     reporter := sensable.BuildReporter(settings, requestbinUrl)
 
     sample := GoReporter.Sample {
-        Data: 32.5,
-        Time: int64(time.Now().UnixNano() / 1e6),
+        Value: 32.5,
+        Timestamp: int64(time.Now().UnixNano() / 1e6),
         State: "it's getting warmer",
     }
 

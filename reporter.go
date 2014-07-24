@@ -10,17 +10,21 @@ import (
 const SensableApiUri = "http://sensable.io/sensable"
 
 type Sample struct {
-    Data float64 `json:"data"`
-    Time int64 `json:"time"`
+    Value float64 `json:"value"`
+    Timestamp int64 `json:"timestamp"`
     State string `json:"state"`
+}
+
+type Location struct {
+    Latitude float64 `json:"latitude"`
+    Longitude float64 `json:"longitude"`
 }
 
 type Sensable struct {
     SensorId string `json:"sensorid"`
     Unit string `json:"unit"`
     SensorType string `json:"sensortype"`
-    Latitude float64 `json:"latitude"`
-    Longitude float64 `json:"longitude"`
+    Location Location `json:"location"`
     Name string `json:"name"`
 }
 
@@ -63,8 +67,7 @@ func (reporter Reporter) Report(sample Sample) (bool, error) {
             reporter.sensable.SensorId,
             reporter.sensable.Unit,
             reporter.sensable.SensorType,
-            reporter.sensable.Latitude,
-            reporter.sensable.Longitude,
+            reporter.sensable.Location,
             reporter.sensable.Name,
         },
         Settings: Settings {
