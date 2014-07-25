@@ -1,5 +1,7 @@
 # Go Reporter for Sensable.io
 
+[![Build Status Image for GoReporter](https://travis-ci.org/Sensable/GoReporter.svg)](https://travis-ci.org/Sensable/GoReporter)
+
 ## Disclaimer
 
 This is the first Go code I have ever written.
