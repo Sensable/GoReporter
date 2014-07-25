@@ -47,3 +47,13 @@ func main() {
     }
 }
 ```
+
+## Run the tests
+
+Unit tests use [testify](https://github.com/stretchr/testify) for assertions
+
+To run the tests simply do
+
+    go test
+
+To run the tests and
