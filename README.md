@@ -4,6 +4,10 @@
 
 This is the first Go code I have ever written.
 
+## Documentation
+
+The documentation for this package is available at: [godoc.org/github.com/Sensable/GoReporter](http://godoc.org/github.com/Sensable/GoReporter)
+
 ## Example
 
 ```go
