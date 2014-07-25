@@ -4,6 +4,10 @@
 
 This is the first Go code I have ever written.
 
+## Documentation
+
+The documentation for this package is available at: [godoc.org/github.com/Sensable/GoReporter](http://godoc.org/github.com/Sensable/GoReporter)
+
 ## Example
 
 ```go
@@ -50,10 +54,18 @@ func main() {
 
 ## Run the tests
 
-Unit tests use [testify](https://github.com/stretchr/testify) for assertions
+Unit tests use [testify](https://github.com/stretchr/testify) for assertions. You can install it with
+
+    go get github.com/stretchr/testify
 
 To run the tests simply do
 
     go test
 
-To run the tests and
+To run the tests and obtain the coverage report you can use
+
+    go test -coverprofile=coverage.out
+
+The coverage report can then be visualized in HTML format with
+
+    go tool cover -html=coverage.out
