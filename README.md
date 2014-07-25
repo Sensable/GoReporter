@@ -1,6 +1,6 @@
 # Go Reporter for Sensable.io
 
-[![Build Status Image for GoReporter](https://travis-ci.org/Sensable/GoReporter.svg)](https://travis-ci.org/Sensable/GoReporter)
+[![Build Status](https://travis-ci.org/Sensable/GoReporter.svg?branch=master)](https://travis-ci.org/Sensable/GoReporter)
 
 ## Disclaimer
 
